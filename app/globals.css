@@ -2,26 +2,161 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+
+html,body{
+    background-color: rgb(248 250 252 );
+    min-height: 100vh;
+    height: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.video-container {
+  position: relative;
+  height: 100%;
+  width: auto;
+  max-height: 500px;
+  aspect-ratio: 16/9;
+  font-size: 10px;
+}
+.video-container video {
+  height: 100%;
+  width: 100%;
+}
+.video-controls {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  gap: .625rem;
+  bottom: 0;
+  width: 100%;
+  padding: 1.875rem .625rem;
+}
+.video-playpause svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  transform: translateY(6px);
+}
+.video-time {
+  flex-grow: 1;
+  position: relative;
+}
+.video-time input {
+  width: 100%;
+  height: .625rem;
+  position: absolute;
+  left: 0;
+  z-index: 2;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 100px;
+  background: #0000;
+}
+.video-time input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 1.25rem;
+  width: 1.25rem;
+  background-color: #f50;
+  border-radius: 50%;
+  border: 2px solid #f50;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+.video-time progress {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: .625rem;
+  background-color: #fff;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 100px;
+  border: none;
+  overflow: hidden;
+}
+.video-time progress::-webkit-progress-bar {
+  background-color: #fff;
+}
+.video-time progress::-webkit-progress-value {
+  background-color: royalblue;
+  opacity: 0.3;
+}
+.video-volume {
+  position: relative;
+  display: flex;
+  width: 1.25rem;
+  transform: rotate(270deg) translateX(-5px);
+}
+.video-volume:hover .range {
+  display: block;
+}
+.video-volume-icon {
+  transform: rotate(90deg);
+  cursor: pointer;
+}
+.video-volume svg {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+.video-volume .range {
+  display: none;
+}
+.video-volume .range input {
+  height: .625rem;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  border-radius: 100px;
+  background: linear-gradient(to right, #f50 100%, #fff 100%);
+}
+.video-volume .range input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 1.25rem;
+  width: 1.25rem;
+  background-color: #f50;
+  border-radius: 50%;
+  border: 2px solid #f50;
+  -webkit-transition: 0.2s ease-in-out;
+  transition: 0.2s ease-in-out;
+}
+.video-speed {
+  position: relative;
+}
+.video-speed:hover .video-speed-options {
+  display: block;
+}
+.video-speed p {
+  font-size: 1.25rem;
+  color: #fff;
+  transform: translateY(5px);
+}
+.video-speed-options {
+  position: absolute;
+  bottom: 2.5rem;
+  right: 0;
+  display: none;
+}
+.video-speed-options label {
+  display: flex;
+  color: #000;
+  font-size: 1rem;
+  gap: .625rem;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+.video-fullscreen {
+  transform: translateY(5px);
+  cursor: pointer;
+}
+.video-fullscreen svg {
+  height: 1.25rem;
+  width: 1.25rem;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.hidden {
+  display: none;
 }
