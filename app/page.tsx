@@ -1,11 +1,11 @@
-import Image from 'next/image';
-
+import { headers } from 'next/headers';
 import { AllSubjectResp, SubjectResp } from './types';
 import Link from 'next/link';
 
-export default async function Home() {
-	const subjects = (await getSubjects()) as AllSubjectResp;
 
+export default async function Home({children}: any) {
+	const subjects = (await getSubjects()) as AllSubjectResp;
+	
 	return (
 		<main className='flex justify-center flex-col items-center p-4 gap-4'>
 			<div className={`subject-header h-[40vh] w-full bg-hero-pattern bg-cover bg-center text-white rounded-md flex items-center justify-center`}>
@@ -31,6 +31,7 @@ export default async function Home() {
 	);
 }
 const getSubjects = async (): Promise<AllSubjectResp> => {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}lectures`);
+	const pathname = headers().get('x-url')
+	const res = await fetch(`${pathname}api/lectures`);
 	return res.json();
 };

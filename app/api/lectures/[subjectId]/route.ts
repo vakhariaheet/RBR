@@ -6,7 +6,7 @@ export async function GET(
 	request: Request,
 	{ params }: { params: { subjectId: string } },
 ) {
-	console.log(params,"backend");
+
 	const subjectIndex = subjects.findIndex(
 		(subject) => subject.order === Number(params.subjectId),
 	);

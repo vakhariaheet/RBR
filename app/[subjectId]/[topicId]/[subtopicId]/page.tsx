@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import VideoPlayer from '@/app/Components/VideoPlayer';
 import Player from '@/app/Components/Player';
 import { Metadata, ResolvingMetadata } from 'next';
+import { headers } from 'next/headers';
 
 interface Props {
 	params: { subjectId: string; topicId: string; subtopicId: string };
@@ -55,8 +56,9 @@ const getTopic = async (
 	subjectId: String,
 	topicId: string,
 ): Promise<TopicResp> => {
+    const pathname = headers().get("x-url");
 	const res = await fetch(
-		`//${process.env.NEXT_PUBLIC_API_URL}lectures/${subjectId}/${topicId}`,
+		`${pathname}api/lectures/${subjectId}/${topicId}`,
 	);
 	return res.json();
 };

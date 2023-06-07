@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import VideoPlayer from '../../Components/VideoPlayer';
 import Player from '@/app/Components/Player';
 import { Metadata, ResolvingMetadata } from 'next';
+import { headers } from 'next/headers';
 
 type Props = {
 	params: { subjectId: string; topicId: string };
@@ -71,8 +72,9 @@ const getTopic = async (
 	subjectId: String,
 	topicId: string,
 ): Promise<TopicResp> => {
+    const pathname = headers().get('x-url');
 	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}lectures/${subjectId}/${topicId}`,
+		`${pathname}api/lectures/${subjectId}/${topicId}`,
 	);
 	return res.json();
 };
@@ -81,8 +83,9 @@ const getLecture = async (
 	topicId: string,
 	subtopicId: string,
 ): Promise<TopicResp | SubtopicResp> => {
+    const pathname = headers().get('x-url');
 	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}lectures/${subjectId}/${topicId}/${subtopicId}`,
+		`${pathname}api/lectures/${subjectId}/${topicId}/${subtopicId}`,
 	);
 	return res.json();
 };
