@@ -2,7 +2,6 @@ import Image from 'next/image';
 
 import { AllSubjectResp, SubjectResp } from './types';
 import Link from 'next/link';
-import PDFViewer from './Components/PDFViewer';
 
 export default async function Home() {
 	const subjects = (await getSubjects()) as AllSubjectResp;
