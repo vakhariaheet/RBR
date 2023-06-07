@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+
 import { NextResponse } from 'next/server';
 import subjects from '@/app/data.json';
 import { Topic } from '@/app/types';
