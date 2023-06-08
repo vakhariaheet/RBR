@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import VideoPlayer from './VideoPlayer';
 import Link from 'next/link';
 import SubTopicPanel from './SubtopicPanel';
+import CheckUserAuth from './CheckUserAuth';
 export interface TopicProps {
 	file: {
 		name: string;
@@ -25,7 +26,8 @@ export default function Player({
 }: TopicProps) {
 	const { next, prev } = getTopicResp.data;
 	return (
-		<div className=' bg-slate-50'>
+        <div className=' bg-slate-50'>
+            <CheckUserAuth/>
 			<div className='bg-slate-100 p-4 shadow-md text-xl flex justify-between'>
 				{prev ? (
 					<Link

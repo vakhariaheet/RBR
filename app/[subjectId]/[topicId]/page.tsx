@@ -55,7 +55,8 @@ export default function Topic({
 	}
 
 	return (
-		<div>
+        <div>
+            
 			<Player
 				file={{
 					name: currentLecture.name,

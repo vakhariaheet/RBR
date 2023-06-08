@@ -1,5 +1,6 @@
 import subjects from '@/app/data.json';
 import { Topic } from '../types';
+import * as jose from 'jose';
 export const getAllSubjects = () => {
 	return subjects.map((subject) => ({
 		id: subject.order,
@@ -49,30 +50,30 @@ export const getTopic = (subjectId: string, topicId: string) => {
 	);
 
 	if (!subject) {
-        return {
-            isSuccess: false,
-            data: {
-                message: 'Subject not found',
-            },
-        };
+		return {
+			isSuccess: false,
+			data: {
+				message: 'Subject not found',
+			},
+		};
 	}
 
 	const topicIndex = subject.topics.findIndex(
 		(topic) => topic.order === Number(topicId),
 	);
-	const topic = subject.topics[ topicIndex ] as Topic;
-	
+	const topic = subject.topics[topicIndex] as Topic;
+
 	const prevIndex = topicIndex === 0 ? null : topicIndex - 1;
 	const nextIndex =
 		topicIndex === subject.topics.length - 1 ? null : topicIndex + 1;
 
 	if (!topic) {
-		return{
+		return {
 			isSuccess: false,
 			data: {
 				message: 'Topic not found',
 			},
-		}
+		};
 	}
 
 	return {
@@ -82,26 +83,27 @@ export const getTopic = (subjectId: string, topicId: string) => {
 				id: topic.order,
 
 				name: topic.name,
-				order:topic.order,
+				order: topic.order,
 				subtopics: topic.subtopics.map((subtopic) => ({
 					...subtopic,
 					id: subtopic.order,
 					isFolder: 'files' in subtopic ? subtopic.files.length > 0 : false,
-					
 				})),
 			},
-			next: nextIndex !== null
-				? {
-						id: nextIndex !==null ? subject.topics[nextIndex].order : null,
-						name: nextIndex !==null ? subject.topics[nextIndex].name : null,
-				  }
-				: null,
-			prev: prevIndex !== null
-				? {
-						id: prevIndex !==null ? subject.topics[prevIndex].order : null,
-						name: prevIndex !==null ? subject.topics[prevIndex].name : null,
-				  }
-				: null,
+			next:
+				nextIndex !== null
+					? {
+							id: nextIndex !== null ? subject.topics[nextIndex].order : null,
+							name: nextIndex !== null ? subject.topics[nextIndex].name : null,
+					  }
+					: null,
+			prev:
+				prevIndex !== null
+					? {
+							id: prevIndex !== null ? subject.topics[prevIndex].order : null,
+							name: prevIndex !== null ? subject.topics[prevIndex].name : null,
+					  }
+					: null,
 		},
 	};
 };
@@ -163,4 +165,23 @@ export const getSubtopic = (
 	};
 };
 
-
+export const validateUser = async (ua: string) => {
+	const user = localStorage.getItem('token');
+	const secret = new TextEncoder().encode(
+		process.env.NEXT_PUBLIC_SECRET as string,
+	);
+	if (!user) return false;
+    const { payload } = await jose.jwtVerify(user, secret, {
+        issuer:window.location.origin,
+    });
+	const decryptedUser = payload as {
+		username: string;
+		password: string;
+		ua: string;
+	};
+	if (!decryptedUser) return false;
+	if (decryptedUser.username !== process.env.NEXT_PUBLIC_USERNAME) return false;
+	if (decryptedUser.password !== process.env.NEXT_PUBLIC_PASSWORD) return false;
+	if (decryptedUser.ua !== ua) return false;
+	return true;
+};

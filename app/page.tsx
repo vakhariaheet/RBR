@@ -2,12 +2,14 @@ import { headers } from 'next/headers';
 import { AllSubjectResp } from './types';
 import Link from 'next/link';
 import { getAllSubjects } from './utils/utils';
+import CheckUserAuth from './Components/CheckUserAuth';
 
 export default async function Home({ children }: any) {
 	const subjects = getSubjects() as AllSubjectResp;
 
 	return (
 		<main className='flex justify-center flex-col items-center p-4 gap-4'>
+			<CheckUserAuth/>
 			<div
 				className={`subject-header h-[40vh] w-full bg-hero-pattern bg-cover bg-center text-white rounded-md flex items-center justify-center`}
 			>
