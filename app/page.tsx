@@ -1,5 +1,5 @@
 import { headers } from 'next/headers';
-import { AllSubjectResp, SubjectResp } from './types';
+import { AllSubjectResp } from './types';
 import Link from 'next/link';
 
 
@@ -31,7 +31,7 @@ export default async function Home({children}: any) {
 	);
 }
 const getSubjects = async (): Promise<AllSubjectResp> => {
-	const pathname = headers().get('x-url')
-	const res = await fetch(`${pathname}api/lectures`);
+
+	const res = await fetch(`http://localhost:3000/api/lectures`);
 	return res.json();
 };
