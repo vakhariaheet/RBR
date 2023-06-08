@@ -3,20 +3,21 @@ import { useEffect, useState } from 'react';
 import VideoPlayer from '@/app/Components/VideoPlayer';
 import Player from '@/app/Components/Player';
 import { Metadata, ResolvingMetadata } from 'next';
+import { getSubtopic, getTopic } from '@/app/utils/utils';
 
 interface Props {
 	params: { subjectId: string; topicId: string; subtopicId: string , fileId: string};
 }
 
-export default async function File({
+export default function File({
 	params,
 }: {
 	params: { subjectId: string; topicId: string; subtopicId: string, fileId: string };
 }) {
-	const getTopicResp = await getTopic(params.subjectId, params.topicId);
+	const getTopicResp = getTopic(params.subjectId, params.topicId) as TopicResp;
 	const { subjectId, topicId, subtopicId,fileId } = params;
 
-	const getLectureResp = await getLecture(subjectId, topicId, subtopicId);
+	const getLectureResp = getSubtopic(subjectId, topicId, subtopicId) as SubtopicResp;
 	if (!getLectureResp.isSuccess) {
 		return <h1>Topic not found</h1>;
 	}
@@ -50,36 +51,17 @@ export default async function File({
 	);
 }
 
-const getTopic = async (
-	subjectId: String,
-	topicId: string,
-): Promise<TopicResp> => {
-    
-	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}lectures/${subjectId}/${topicId}`,
-	);
-	return res.json();
-};
-const getLecture = async (
-	subjectId: string,
-	topicId: string,
-	subtopicId: string,
-): Promise<TopicResp | SubtopicResp> => {
-	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}lectures/${subjectId}/${topicId}/${subtopicId}`,
-	);
-	return res.json();
-};
+
 
 export const generateMetadata = async (
 	{ params }: Props,
 	parent: ResolvingMetadata,
 ): Promise<Metadata> => {
-	const getSubjectResp = await getLecture(
+	const getSubjectResp = await getSubtopic(
 		params.subjectId,
 		params.topicId,
 		params.subtopicId,
-    );
+    ) as TopicResp| SubtopicResp;
     const fileId = params.fileId;
     
 	if (!getSubjectResp.isSuccess) {

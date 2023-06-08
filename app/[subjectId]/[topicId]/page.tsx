@@ -1,19 +1,18 @@
 import { SubtopicResp, TopicResp } from '@/app/types';
-import { useEffect, useState } from 'react';
-import VideoPlayer from '../../Components/VideoPlayer';
 import Player from '@/app/Components/Player';
 import { Metadata, ResolvingMetadata } from 'next';
+import { getSubtopic, getTopic } from '@/app/utils/utils';
 
 type Props = {
 	params: { subjectId: string; topicId: string };
 	searchParams: { [key: string]: string | string[] | undefined };
 };
-export default async function Topic({
+export default function Topic({
 	params,
 }: {
 	params: { subjectId: string; topicId: string };
 }) {
-	const getTopicResp = await getTopic(params.subjectId, params.topicId);
+	const getTopicResp = getTopic(params.subjectId, params.topicId) as TopicResp;
 	const { subjectId, topicId } = params;
 	let fileId: string | undefined = undefined;
 	let subtopicId = undefined;
@@ -32,7 +31,11 @@ export default async function Topic({
 		subtopicId = getTopicResp.data.result.subtopics[0].order.toString();
 	}
 
-	const getLectureResp = await getLecture(subjectId, topicId, subtopicId);
+	const getLectureResp = getSubtopic(
+		subjectId,
+		topicId,
+		subtopicId,
+	) as SubtopicResp;
 
 	if (!getLectureResp.isSuccess) {
 		return <h1>Topic not found</h1>;
@@ -67,31 +70,11 @@ export default async function Topic({
 	);
 }
 
-const getTopic = async (
-	subjectId: String,
-	topicId: string,
-): Promise<TopicResp> => {
-	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}lectures/${subjectId}/${topicId}`,
-	);
-	return res.json();
-};
-const getLecture = async (
-	subjectId: string,
-	topicId: string,
-	subtopicId: string,
-): Promise<TopicResp | SubtopicResp> => {
-	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_API_URL}lectures/${subjectId}/${topicId}/${subtopicId}`,
-	);
-	return res.json();
-};
-
-export const generateMetadata = async (
+export const generateMetadata = (
 	{ params }: Props,
 	parent: ResolvingMetadata,
-): Promise<Metadata> => {
-	const getTopicResp = await getTopic(params.subjectId, params.topicId);
+): Metadata => {
+	const getTopicResp = getTopic(params.subjectId, params.topicId);
 	if (!getTopicResp.isSuccess) {
 		return {
 			title: 'Topic not found',
@@ -99,6 +82,13 @@ export const generateMetadata = async (
 		};
 	}
 	const topic = getTopicResp.data.result;
+	if (!topic) {
+		return {
+			title: 'Topic not found',
+			description: 'Topic not found',
+		};
+	}
+
 	return {
 		title: topic.name,
 		description: topic.name,
