@@ -9,7 +9,7 @@ export default function Login() {
 	const [password, setPassword] = useState('');
 	const router = useRouter();
 	const onLogin = async () => {
-		const res = await fetch('http://localhost:3000/api/auth/login', {
+		const res = await fetch(`${window.location.origin}/api/auth/login`, {
 			method: 'POST',
 			body: JSON.stringify({
 				username,
