@@ -9,12 +9,12 @@ interface LogsBody {
 	fileId?: string;
 	subjectId: string;
 }
-
- enum LogType {
+enum LogType {
 	VIDEO = 'VIDEO',
 	VIDEO_ENDED = 'VIDEO_ENDED',
 	PDF = 'PDF',
 }
+ 
 
 
 

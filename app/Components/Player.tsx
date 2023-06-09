@@ -1,12 +1,18 @@
 'use client';
-import { SubtopicResp, TopicResp, Topic, LogType } from '@/app/types';
+import { SubtopicResp, TopicResp, Topic } from '@/app/types';
 import { useEffect, useRef, useState } from 'react';
 import VideoPlayer from './VideoPlayer';
 import Link from 'next/link';
 import SubTopicPanel from './SubtopicPanel';
 
 import PDFViewer from './PDFViewer';
+enum LogType {
+	VIDEO = 'VIDEO',
+	VIDEO_ENDED = 'VIDEO_ENDED',
+	PDF = 'PDF',
+}
 export interface TopicProps {
+	
 	file: {
 		name: string;
 		mimeType: string;
