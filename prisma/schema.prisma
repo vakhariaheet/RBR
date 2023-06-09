@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  username    String @unique
+  password String
+}
+
+model PDFWatchInfo {
+  id     String @id @default(uuid())
+  pdfId  String
+  userId String
+}
+
+model VideoWatchInfo {
+  id          String  @id @default(uuid())
+  videoId     String 
+  timeWatched Float
+  hasEnded    Boolean
+  userId      String
+}
+
+model SubjectWatchInfo {
+  id        String  @id @default(uuid())
+  subjectId String
+  hasEnded  Boolean
+  userId    String
+}
+
+model TopicWatchInfo {
+  id       String  @id @default(uuid())
+  topicId  String
+  hasEnded Boolean
+  userId   String
+
+}

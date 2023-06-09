@@ -2,8 +2,7 @@ import { Metadata, ResolvingMetadata } from 'next';
 import React from 'react';
 import { headers } from 'next/headers';
 import Link from 'next/link';
-import { getSubject, validateUser } from '../utils/utils';
-import CheckUserAuth from '../Components/CheckUserAuth';
+import { authenticateUser, getSubject } from '../utils/utils';
 
 type Props = {
 	params: { subjectId: string };
@@ -15,15 +14,15 @@ export default async function Subject({
 }: {
 	params: { subjectId: string };
 }) {
+	await authenticateUser();
 	const getSubjectResp = await getSubject(params.subjectId);
 	if (!getSubjectResp.isSuccess) {
 		return <h1>Subject not found</h1>;
 	}
 	const subject = getSubjectResp.data.result;
-	
+
 	return (
 		<div className='p-3 bg-slate-50'>
-			<CheckUserAuth/>
 			<div
 				className={`subject-header h-[40vh] bg-cover bg-center text-white rounded-md flex items-center justify-center`}
 				style={{

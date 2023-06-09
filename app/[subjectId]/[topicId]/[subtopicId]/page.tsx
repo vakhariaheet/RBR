@@ -1,18 +1,19 @@
 import { SubtopicResp, TopicResp } from '@/app/types';
 import Player from '@/app/Components/Player';
 import { Metadata, ResolvingMetadata } from 'next';
-import { getSubtopic, getTopic } from '@/app/utils/utils';
+import { authenticateUser, getSubtopic, getTopic } from '@/app/utils/utils';
 // import { headers } from 'next/headers';
 
 interface Props {
 	params: { subjectId: string; topicId: string; subtopicId: string };
 }
 
-export default function Topic({
+export default async function Topic({
 	params,
 }: {
 	params: { subjectId: string; topicId: string; subtopicId: string };
-}) {
+	}) {
+		await authenticateUser();
 	const getTopicResp = getTopic(params.subjectId, params.topicId) as TopicResp;
 	const { subjectId, topicId, subtopicId } = params;
 	let fileId: string | undefined = undefined;
@@ -46,6 +47,8 @@ export default function Topic({
 				getTopicResp={getTopicResp}
 				topic={getTopicResp.data.result}
 				subjectId={subjectId}
+				subtopicId={subtopicId}
+				fileId={fileId}
 			/>
 		</div>
 	);

@@ -1,6 +1,9 @@
 import subjects from '@/app/data.json';
 import { Topic } from '../types';
 import * as jose from 'jose';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+// import { cookies } from 'next/headers';
 export const getAllSubjects = () => {
 	return subjects.map((subject) => ({
 		id: subject.order,
@@ -150,38 +153,38 @@ export const getSubtopic = (
 			next:
 				nextIndex !== null
 					? {
-							id: nextIndex !== null ? topic.subtopics[nextIndex].order : null,
-							name: nextIndex !== null ? topic.subtopics[nextIndex].name : null,
+							id: nextIndex !== null ? topic.subtopics[nextIndex]?.order : null,
+							name: nextIndex !== null ? topic.subtopics[nextIndex]?.name : null,
 					  }
 					: null,
 			prev:
 				prevIndex !== null
 					? {
-							id: prevIndex !== null ? topic.subtopics[prevIndex].order : null,
-							name: prevIndex !== null ? topic.subtopics[prevIndex].name : null,
+							id: prevIndex !== null ? topic.subtopics[prevIndex]?.order : null,
+							name: prevIndex !== null ? topic.subtopics[prevIndex]?.name : null,
 					  }
 					: null,
 		},
 	};
 };
 
-export const validateUser = async (ua: string) => {
-	const user = localStorage.getItem('token');
+
+
+
+export const isUserAuthenticated = async () => {
+	const token = (await cookies().getAll())[ 0 ];
+	if (!token) return false;
 	const secret = new TextEncoder().encode(
-		process.env.NEXT_PUBLIC_SECRET as string,
+		process.env.NEXT_JWT as string,
 	);
-	if (!user) return false;
-    const { payload } = await jose.jwtVerify(user, secret, {
-        issuer:window.location.origin,
-    });
-	const decryptedUser = payload as {
-		username: string;
-		password: string;
-		ua: string;
-	};
-	if (!decryptedUser) return false;
-	if (decryptedUser.username !== process.env.NEXT_PUBLIC_USERNAME) return false;
-	if (decryptedUser.password !== process.env.NEXT_PUBLIC_PASSWORD) return false;
-	if (decryptedUser.ua !== ua) return false;
+	const { payload } = await jose.jwtVerify(token.value, secret, {
+		issuer: 'gate.heetvakharia.in',
+	});
+	if (!payload) return false;
 	return true;
 };
+
+export const authenticateUser = async () => {
+	const resp =await isUserAuthenticated();
+	if (!resp) redirect('/login');
+}

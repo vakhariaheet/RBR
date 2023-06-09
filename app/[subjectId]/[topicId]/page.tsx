@@ -1,17 +1,18 @@
 import { SubtopicResp, TopicResp } from '@/app/types';
 import Player from '@/app/Components/Player';
 import { Metadata, ResolvingMetadata } from 'next';
-import { getSubtopic, getTopic } from '@/app/utils/utils';
+import { authenticateUser, getSubtopic, getTopic } from '@/app/utils/utils';
 
 type Props = {
 	params: { subjectId: string; topicId: string };
 	searchParams: { [key: string]: string | string[] | undefined };
 };
-export default function Topic({
+export default async function Topic({
 	params,
 }: {
 	params: { subjectId: string; topicId: string };
 }) {
+	await authenticateUser();
 	const getTopicResp = getTopic(params.subjectId, params.topicId) as TopicResp;
 	const { subjectId, topicId } = params;
 	let fileId: string | undefined = undefined;
@@ -55,8 +56,7 @@ export default function Topic({
 	}
 
 	return (
-        <div>
-            
+		<div>
 			<Player
 				file={{
 					name: currentLecture.name,

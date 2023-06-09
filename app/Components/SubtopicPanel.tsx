@@ -19,9 +19,9 @@ export default function SubTopicPanel({
 	'use client';
 	const [openedSubtopic, setOpenedSubtopic] = useState<number[]>([]);
 	return (
-		<div className='flex justify-center '>
+		<div className='flex justify-center w-1/3 max-h-[80vh] overflow-y-scroll max-xl:w-full max-xl:max-h-full '>
 			{'subtopics' in topic && topic.subtopics.length > 0 && (
-				<div className='topics w-[70%] flex flex-col rounded-md overflow-hidden '>
+				<div className='topics w-full flex flex-col rounded-md '>
 					{topic.subtopics.map((subtopic) => (
 						<>
 							{'files' in subtopic && subtopic.files.length > 0 ? (
