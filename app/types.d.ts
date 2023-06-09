@@ -64,3 +64,8 @@ export type AllSubjectResp ={
 	id: number;
 	name: string;
 }[]
+export enum LogType {
+	VIDEO = 'VIDEO',
+	VIDEO_ENDED = 'VIDEO_ENDED',
+	PDF = 'PDF',
+}

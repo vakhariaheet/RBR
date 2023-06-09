@@ -1,10 +1,10 @@
 'use client';
-import { SubtopicResp, TopicResp, Topic } from '@/app/types';
+import { SubtopicResp, TopicResp, Topic, LogType } from '@/app/types';
 import { useEffect, useRef, useState } from 'react';
 import VideoPlayer from './VideoPlayer';
 import Link from 'next/link';
 import SubTopicPanel from './SubtopicPanel';
-import { LogType } from '../api/logs/route';
+
 import PDFViewer from './PDFViewer';
 export interface TopicProps {
 	file: {
