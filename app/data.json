@@ -1873,14 +1873,14 @@
 					{
 						"order": 2,
 						"name": "CN practice questions set 1.p",
-						"mimeType": "video/mp4",
+						"mimeType": "pdf",
 						"uri": "/RBR/4.+Computer+Networks/Practice+Qns/CN+practice+questions+set+1.p",
 						"path": "/RBR/4. Computer Networks/Practice Qns/CN practice questions set 1.p"
 					},
 					{
 						"order": 3,
 						"name": "CN practice questions set 2.p",
-						"mimeType": "video/mp4",
+						"mimeType": "pdf",
 						"uri": "/RBR/4.+Computer+Networks/Practice+Qns/CN+practice+questions+set+2.p",
 						"path": "/RBR/4. Computer Networks/Practice Qns/CN practice questions set 2.p"
 					},
@@ -1894,7 +1894,7 @@
 					{
 						"order": 5,
 						"name": "CN practice questions set 3.p",
-						"mimeType": "video/mp4",
+						"mimeType": "pdf",
 						"uri": "/RBR/4.+Computer+Networks/Practice+Qns/CN+practice+questions+set+3.p",
 						"path": "/RBR/4. Computer Networks/Practice Qns/CN practice questions set 3.p"
 					},
@@ -1908,7 +1908,7 @@
 					{
 						"order": 7,
 						"name": "CN practice questions set 4.p",
-						"mimeType": "video/mp4",
+						"mimeType": "pdf",
 						"uri": "/RBR/4.+Computer+Networks/Practice+Qns/CN+practice+questions+set+4.p",
 						"path": "/RBR/4. Computer Networks/Practice Qns/CN practice questions set 4.p"
 					},
@@ -1922,14 +1922,14 @@
 					{
 						"order": 9,
 						"name": "CN practice questions set 5.p",
-						"mimeType": "video/mp4",
+						"mimeType": "pdf",
 						"uri": "/RBR/4.+Computer+Networks/Practice+Qns/CN+practice+questions+set+5.p",
 						"path": "/RBR/4. Computer Networks/Practice Qns/CN practice questions set 5.p"
 					},
 					{
 						"order": 10,
 						"name": "CN solutions set 5.PDF",
-						"mimeType": "video/mp4",
+						"mimeType": "pdf",
 						"uri": "/RBR/4.+Computer+Networks/Practice+Qns/CN+solutions+set+5.PDF",
 						"path": "/RBR/4. Computer Networks/Practice Qns/CN solutions set 5.PDF"
 					}
