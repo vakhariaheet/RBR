@@ -1,5 +1,5 @@
+import { prisma } from "@/app/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 
 export const POST = async (req: NextRequest, res: NextResponse) => { 
     const data = await req.json() as { username: string, password: string, name: string, code: string };
@@ -34,7 +34,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
             status: 401,
         });
     }
-    const user = await new PrismaClient().user.findFirst({
+    const user = await prisma.user.findFirst({
         where: {
             username,
         }
@@ -49,7 +49,7 @@ export const POST = async (req: NextRequest, res: NextResponse) => {
             status: 409,
         });
     }
-    const newUser = await new PrismaClient().user.create({
+    const newUser = await prisma.user.create({
         data: {
             username,
             password,

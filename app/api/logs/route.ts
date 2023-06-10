@@ -1,6 +1,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { getLectureId } from '@/app/utils/utils';
+import { prisma } from '@/app/lib/prisma';
 interface LogsBody {
 	type: LogType;
 	timestamp?: number;
@@ -19,7 +20,7 @@ enum LogType {
 
 
 export const POST = async (req: Request) => {
-   const prisma = new PrismaClient();
+   
 	const data = (await req.json()) as LogsBody;
 	switch (data.type) {
 		case LogType.VIDEO: {
@@ -138,17 +139,4 @@ export const POST = async (req: Request) => {
 	}
 };
 
-const getLectureId = (
-	subjectId: string,
-	topicId: string,
-	subtopicId?: string,
-	fileId?: string,
-) => {
-	if (!subtopicId) {
-		return `${subjectId}-${topicId}`;
-	}
-	if (!fileId) {
-		return `${subjectId}-${topicId}-${subtopicId}`;
-	}
-	return `${subjectId}-${topicId}-${subtopicId}-${fileId}`;
-};
+

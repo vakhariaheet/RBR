@@ -18,7 +18,7 @@ class ViewSDKClient {
     ready() {
       return this.readyPromise;
     }
-    previewFile(divId:string, viewerConfig:any, url:string) {
+    previewFile(divId:string, viewerConfig:any, url:string, fileName:string) {
       const config = {
           clientId: process.env.NEXT_PUBLIC_ABODE_ID, ///enter lient id here
             divId,
@@ -33,7 +33,7 @@ class ViewSDKClient {
             },
           },
           metaData: {
-            fileName: "Menu.pdf",
+            fileName,
             id: "6d07d124-ac85-43b3-a867-36930f502ac6",
           },
         },

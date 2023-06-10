@@ -1,13 +1,28 @@
 import Link from 'next/link';
-import { Topic } from '../types';
+import { Subtopic, Topic } from '../types';
 import { useState } from 'react';
-
+import { PDFWatchInfo, VideoWatchInfo } from '@prisma/client';
+const getLectureId = (
+	subjectId: string,
+	topicId: string,
+	subtopicId?: string,
+	fileId?: string,
+) => {
+	if (!subtopicId) {
+		return `${subjectId}-${topicId}`;
+	}
+	if (!fileId) {
+		return `${subjectId}-${topicId}-${subtopicId}`;
+	}
+	return `${subjectId}-${topicId}-${subtopicId}-${fileId}`;
+};
 interface SubTopicPanelProps {
 	topic: Topic;
 	subjectId: string;
 	subtopicId?: string;
 	fileId?: string;
 	name?: string;
+	allViewInfo?: (VideoWatchInfo | PDFWatchInfo)[];
 }
 
 export default function SubTopicPanel({
@@ -15,9 +30,77 @@ export default function SubTopicPanel({
 	subjectId,
 	fileId,
 	subtopicId,
+	name,
+	allViewInfo,
 }: SubTopicPanelProps) {
 	'use client';
-	const [openedSubtopic, setOpenedSubtopic] = useState<number[]>([]);
+	const [openedSubtopic, setOpenedSubtopic] = useState<number[]>([
+		Number(subtopicId),
+	]);
+	const verifyId = (subtopic: Subtopic | File, fileId?: string) => {
+		if (allViewInfo) {
+			if ('files' in subtopic && subtopic.files.length > 0) {
+				const file = subtopic.files.find(
+					(file) => file.order === Number(fileId),
+				);
+				if (file?.mimeType === 'pdf')
+					return allViewInfo.find(
+						(info) =>
+							'pdfId' in info &&
+							info.pdfId ===
+								getLectureId(
+									subjectId,
+									topic.order.toString(),
+									subtopic.order.toString(),
+									fileId,
+								),
+					);
+				else {
+					const video = allViewInfo.find(
+						(info) =>
+							'videoId' in info &&
+							info.videoId ===
+								getLectureId(
+									subjectId,
+									topic.order.toString(),
+									subtopic.order.toString(),
+									fileId,
+								),
+					) as VideoWatchInfo | undefined;
+					return video?.hasEnded ? true : false;
+				}
+			} else {
+				if (!('order' in subtopic)) return false;
+				if ('mimeType' in subtopic && subtopic.mimeType === 'pdf')
+					return allViewInfo.find(
+						(info) =>
+							'pdfId' in info &&
+							info.pdfId ===
+								getLectureId(
+									subjectId,
+									topic.order.toString(),
+									subtopic.order.toString(),
+									fileId,
+								),
+					);
+				else {
+					const video = allViewInfo.find(
+						(info) =>
+							'videoId' in info &&
+							info.videoId ===
+								getLectureId(
+									subjectId,
+									topic.order.toString(),
+									subtopic.order.toString(),
+									fileId,
+								),
+					) as VideoWatchInfo | undefined;
+					return video?.hasEnded ? true : false;
+				}
+			}
+		}
+		return false;
+	};
 	return (
 		<div className='flex justify-center w-1/3 max-h-[80vh] overflow-y-scroll max-xl:w-full max-xl:max-h-full '>
 			{'subtopics' in topic && topic.subtopics.length > 0 && (
@@ -33,6 +116,7 @@ export default function SubTopicPanel({
 										key={crypto.randomUUID()}
 										className='cursor-pointer'
 										onClick={() => {
+											console.log(openedSubtopic, subtopic.order);
 											if (openedSubtopic?.includes(subtopic.order)) {
 												setOpenedSubtopic(
 													openedSubtopic?.filter((id) => id !== subtopic.order),
@@ -65,8 +149,24 @@ export default function SubTopicPanel({
 										{openedSubtopic?.includes(subtopic.order) &&
 											subtopic.files.map((file) => (
 												<div
-													className='file p-2  hover:text-blue-500 hover:bg-slate-100  '
+													className={`file fileHover p-2  hover:tw-text-blue-500 hover:tw-bg-blue-500 hover:bg-opacity-10 ${
+														name === file.name &&
+														'bg-blue-500 text-blue-500 bg-opacity-10'
+													} `}
 													key={crypto.randomUUID()}
+													style={{
+														color:
+															verifyId(subtopic, file.order.toString()) &&
+															name !== file.name
+																? 'rgb(34, 197, 94)'
+																: '',
+														background: verifyId(
+															subtopic,
+															file.order.toString(),
+														)
+															? 'rgba(34, 197, 94,.1)'
+															: '',
+													}}
 												>
 													<Link
 														href={`/${subjectId}/${topic.order}/${subtopic.order}/${file.order}`}
@@ -79,8 +179,20 @@ export default function SubTopicPanel({
 								</div>
 							) : (
 								<Link
-									className='hover:text-blue-500 hover:bg-slate-100  p-3 bg-white border border-b-0 border-x-0 first:border-t-0  duration-200 ease-in'
+									className={` fileHover hover:text-blue-500 hover:bg-blue-500 hover:bg-opacity-10  p-3 bg-white border border-b-0 border-x-0 first:border-t-0  duration-200 ease-in ${
+										name === subtopic.name && 'bg-blue-500 bg-opacity-10'
+									}`}
 									href={`/${subjectId}/${topic.order}/${subtopic.order}`}
+									style={{
+										color:
+											verifyId(subtopic as Subtopic | File) &&
+											name !== subtopic.name
+												? 'rgb(34, 197, 94)'
+												: '',
+										background: verifyId(subtopic as Subtopic | File)
+											? 'rgba(34, 197, 94,.1)'
+											: '',
+									}}
 								>
 									{subtopic.name}
 								</Link>

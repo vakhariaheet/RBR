@@ -1,6 +1,20 @@
 import React, { useEffect } from 'react';
 import ViewSDKClient from './ViewSDKClient';
-const PDFViewer = ({ url }: { url: string }) => {
+enum LogType {
+	VIDEO = 'VIDEO',
+	VIDEO_ENDED = 'VIDEO_ENDED',
+	PDF = 'PDF',
+}
+interface Props { 
+	url: string;
+	name: string;
+	subtopicId?: string;
+	topicId: string;
+	subjectId: string;
+	fileId?: string;
+
+}
+const PDFViewer = ({ url, name, subtopicId,subjectId,topicId,fileId }: Props) => {
 	useEffect(() => {
 		const loadPDF = () => {
 			console.log('loadPDF');
@@ -14,13 +28,28 @@ const PDFViewer = ({ url }: { url: string }) => {
 						showLeftHandPanel: true,
 						showPageControls: true,
 						showDownloadPDF: true,
-						showPrintPDF: true,
+                        showPrintPDF: true,
+                        
 					},
-					url,
+                    url,
+                    name
 				);
 			});
 		};
 		loadPDF();
+		(async () => {
+			await fetch(`${window.location.origin}/api/logs`, {
+				method: 'POST',
+				body: JSON.stringify({
+					type: LogType.PDF,
+					topicId,
+					subjectId,
+					subtopicId,
+					fileId,
+				}),
+			})
+		})()
+
 	}, []);
 
 	return <div id='pdf-div' className='w-full aspect-video'></div>;

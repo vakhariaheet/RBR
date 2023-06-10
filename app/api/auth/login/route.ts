@@ -1,13 +1,14 @@
-import { PrismaClient } from "@prisma/client";
+
 import { NextRequest, NextResponse } from "next/server";
 import * as jose from 'jose'
+import { prisma } from "@/app/lib/prisma";
 interface LoginBody {
     username: string;
     password: string;
 }
 
 export const POST = async (req: NextRequest, res: Response) => { 
-    const prisma = new PrismaClient();
+  
     const { username, password } = await req.json() as LoginBody;
     const user = await prisma.user.findUnique({
         where: {

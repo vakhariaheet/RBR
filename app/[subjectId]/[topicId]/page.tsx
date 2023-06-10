@@ -1,7 +1,14 @@
 import { SubtopicResp, TopicResp } from '@/app/types';
 import Player from '@/app/Components/Player';
 import { Metadata, ResolvingMetadata } from 'next';
-import { authenticateUser, getSubtopic, getTopic } from '@/app/utils/utils';
+import {
+	authenticateUser,
+	getLectureId,
+	getSubtopic,
+	getTopic,
+} from '@/app/utils/utils';
+import { prisma } from '@/app/lib/prisma';
+import { PDFWatchInfo, VideoWatchInfo } from '@prisma/client';
 
 type Props = {
 	params: { subjectId: string; topicId: string };
@@ -16,7 +23,7 @@ export default async function Topic({
 	const getTopicResp = getTopic(params.subjectId, params.topicId) as TopicResp;
 	const { subjectId, topicId } = params;
 	let fileId: string | undefined = undefined;
-	let subtopicId = undefined;
+	let subtopicId: string | undefined = undefined;
 	if (!getTopicResp.data.result) {
 		return <h1>Topic not found</h1>;
 	}
@@ -54,7 +61,36 @@ export default async function Topic({
 	if (!getLectureResp.isSuccess) {
 		return <h1>Topic not found</h1>;
 	}
-
+	let viewInfo;
+	const allViewInfo: (VideoWatchInfo | PDFWatchInfo)[] =
+		await prisma.videoWatchInfo.findMany({
+			where: {
+				videoId: {
+					startsWith: `${subjectId}-${topicId}-`,
+				},
+			},
+		});
+	const allPDFViewInfo: PDFWatchInfo[] = await prisma.pDFWatchInfo.findMany({
+		where: {
+			pdfId: {
+				startsWith: `${subjectId}-${topicId}-`,
+			},
+		},
+	});
+	allViewInfo.push(...allPDFViewInfo);
+	if (currentLecture) {
+		if (currentLecture.mimeType === 'video/mp4') {
+			viewInfo = allViewInfo.find(
+				(info) =>
+					'videoId' in info &&
+					info.videoId === getLectureId(subjectId, topicId, subtopicId, fileId),
+			);
+		} else {
+			viewInfo = allViewInfo.find(
+				(info) => "pdfId" in info && info.pdfId === getLectureId(subjectId, topicId, subtopicId),
+			);
+		}
+	}
 	return (
 		<div>
 			<Player
@@ -66,6 +102,10 @@ export default async function Topic({
 				getTopicResp={getTopicResp}
 				topic={getTopicResp.data.result}
 				subjectId={subjectId}
+				fileId={fileId}
+				subtopicId={subtopicId}
+				viewInfo={viewInfo as VideoWatchInfo}
+				allViewInfo={allViewInfo}
 			/>
 		</div>
 	);

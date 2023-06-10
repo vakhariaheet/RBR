@@ -6,13 +6,13 @@ import Link from 'next/link';
 import SubTopicPanel from './SubtopicPanel';
 
 import PDFViewer from './PDFViewer';
+import { PDFWatchInfo, VideoWatchInfo } from '@prisma/client';
 enum LogType {
 	VIDEO = 'VIDEO',
 	VIDEO_ENDED = 'VIDEO_ENDED',
 	PDF = 'PDF',
 }
 export interface TopicProps {
-	
 	file: {
 		name: string;
 		mimeType: string;
@@ -23,6 +23,14 @@ export interface TopicProps {
 	getTopicResp: TopicResp;
 	fileId?: string;
 	subtopicId?: string;
+	viewInfo?: {
+		id: string;
+		videoId: string;
+		timeWatched: number;
+		hasEnded: boolean;
+		userId: string;
+	};
+	allViewInfo?: (VideoWatchInfo | PDFWatchInfo)[];
 }
 
 export default function Player({
@@ -32,17 +40,17 @@ export default function Player({
 	fileId,
 	getTopicResp,
 	subtopicId,
+	viewInfo,
+	allViewInfo
 }: TopicProps) {
 	const { next, prev } = getTopicResp.data;
 	const [ref, setRef] = useState<HTMLVideoElement | null>(null);
 	useEffect(() => {
-		console.log('useEffect', ref);
 		if (!ref) return;
 		let interval: NodeJS.Timeout;
 		const onPlay = async () => {
-			console.log('playing');
 			interval = setInterval(() => {
-				fetch(`http://localhost:3000/api/logs`, {
+				fetch(`${window.location.origin}/api/logs`, {
 					method: 'POST',
 					body: JSON.stringify({
 						type: LogType.VIDEO,
@@ -59,8 +67,7 @@ export default function Player({
 			}, 3000);
 		};
 		const onEnd = async () => {
-			console.log('ended');
-			await fetch(`http://localhost:3000/api/logs`, {
+			await fetch(`${window.location.origin}/api/logs`, {
 				method: 'POST',
 				body: JSON.stringify({
 					type: LogType.VIDEO_ENDED,
@@ -79,6 +86,10 @@ export default function Player({
 		ref.addEventListener('pause', () => {
 			clearInterval(interval);
 		});
+		ref.addEventListener('loadedmetadata', () => {
+			if (!viewInfo) return;
+			ref.currentTime = viewInfo.timeWatched;
+		});
 		ref.addEventListener('ended', onEnd);
 		return () => {
 			ref?.removeEventListener('play', onPlay);
@@ -86,6 +97,10 @@ export default function Player({
 				clearInterval(interval);
 			});
 			ref?.removeEventListener('ended', onEnd);
+			ref.removeEventListener('loadedmetadata', () => {
+				if (!viewInfo) return;
+				ref.currentTime = viewInfo.timeWatched;
+			});
 			clearInterval(interval);
 		};
 	}, [ref]);
@@ -148,6 +163,11 @@ export default function Player({
 						) : (
 							<PDFViewer
 								url={`${process.env.NEXT_PUBLIC_S3_BUCKET}${file.uri}`}
+								name={file.name}
+								subjectId={subjectId}
+								subtopicId={subtopicId}
+								fileId={fileId}
+								topicId={topic.order.toString()}
 							/>
 						)}
 					</div>
@@ -160,9 +180,10 @@ export default function Player({
 				<SubTopicPanel
 					topic={topic}
 					subjectId={subjectId}
-					subtopicId={subjectId}
+					subtopicId={subtopicId}
 					fileId={fileId}
 					name={file.name}
+					allViewInfo={allViewInfo}
 				/>
 			</div>
 		</div>

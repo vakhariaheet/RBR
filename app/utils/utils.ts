@@ -3,6 +3,7 @@ import { Topic } from '../types';
 import * as jose from 'jose';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { NextRequest } from 'next/server';
 // import { cookies } from 'next/headers';
 export const getAllSubjects = () => {
 	return subjects.map((subject) => ({
@@ -188,3 +189,17 @@ export const authenticateUser = async () => {
 	const resp =await isUserAuthenticated();
 	if (!resp) redirect('/login');
 }
+export const getLectureId = (
+	subjectId: string,
+	topicId: string,
+	subtopicId?: string,
+	fileId?: string,
+) => {
+	if (!subtopicId) {
+		return `${subjectId}-${topicId}`;
+	}
+	if (!fileId) {
+		return `${subjectId}-${topicId}-${subtopicId}`;
+	}
+	return `${subjectId}-${topicId}-${subtopicId}-${fileId}`;
+};
