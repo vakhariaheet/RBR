@@ -41,6 +41,7 @@ export const POST = async (req: NextRequest, res: Response) => {
     const token = await new jose.SignJWT({
         username,
         iat: Date.now(),
+        id:user.id,
     }).setProtectedHeader({alg:"HS256"}).setIssuer('gate.heetvakharia.in').sign(secret);
     req.cookies.set({
         name: 'token',

@@ -17,7 +17,7 @@ interface Props {
 const PDFViewer = ({ url, name, subtopicId,subjectId,topicId,fileId }: Props) => {
 	useEffect(() => {
 		const loadPDF = () => {
-			console.log('loadPDF');
+			
 			const viewSDKClient = new ViewSDKClient();
 			viewSDKClient.ready().then(() => {
 				viewSDKClient.previewFile(

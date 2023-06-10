@@ -62,7 +62,7 @@ class ViewSDKClient {
     }
     registerSaveApiHandler() {
       const saveApiHandler = (metaData:any, content:any, options:any) => {
-        console.log(metaData, content, options);
+       
         return new Promise((resolve) => {
           setTimeout(() => {
             const response = {
