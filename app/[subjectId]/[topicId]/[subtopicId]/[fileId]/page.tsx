@@ -31,7 +31,7 @@ export default async function File({
 		fileId: string;
 	};
 }) {
-	await authenticateUser();
+	const user = await authenticateUser();
 	const getTopicResp = getTopic(params.subjectId, params.topicId) as TopicResp;
 	const { subjectId, topicId, subtopicId, fileId } = params;
 
@@ -63,6 +63,7 @@ export default async function File({
 				videoId: {
 					startsWith: `${subjectId}-${topicId}-`,
 				},
+				userId: user.id,
 			},
 		});
 	const allPDFViewInfo: PDFWatchInfo[] = await prisma.pDFWatchInfo.findMany({
@@ -70,6 +71,7 @@ export default async function File({
 			pdfId: {
 				startsWith: `${subjectId}-${topicId}-`,
 			},
+			userId: user.id,
 		},
 	});
 	allViewInfo.push(...allPDFViewInfo);

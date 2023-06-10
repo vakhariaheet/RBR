@@ -184,12 +184,17 @@ export const isUserAuthenticated = async () => {
 		issuer: 'gate.heetvakharia.in',
 	});
 	if (!payload) return false;
-	return true;
+	return payload;
 };
 
-export const authenticateUser = async () => {
+export const authenticateUser = async (): Promise<{
+	username: string;
+	id: string;
+	iat: number;
+}> => {
 	const resp =await isUserAuthenticated();
 	if (!resp) redirect('/login');
+	return resp;
 }
 export const getLectureId = (
 	subjectId: string,
