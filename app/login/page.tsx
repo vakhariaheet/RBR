@@ -20,10 +20,10 @@ export default function Login() {
 			},
 		});
 		const data = await res.json();
-        console.log(data);
+    
         if (data.isSuccess) {
            router.push('/');
-            console.log(data);
+           
         }
         else alert('Invalid username or password');
 	};

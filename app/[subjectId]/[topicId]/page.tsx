@@ -43,15 +43,17 @@ export default async function Topic({
 		subjectId,
 		topicId,
 		subtopicId,
-	) as SubtopicResp;
-
+	) as SubtopicResp   ;
+		
 	if (!getLectureResp.isSuccess) {
 		return <h1>Topic not found</h1>;
 	}
 
 	let currentLecture: any = {};
-
-	if (!fileId || !('files' in getLectureResp.data.result)) {
+	if ("mimeType" in getTopicResp.data.result) { 
+		
+		currentLecture = getTopicResp.data.result;
+	}else if (!fileId || !('files' in getLectureResp.data.result)) {
 		currentLecture = getLectureResp.data.result;
 	} else {
 		currentLecture = getLectureResp.data.result.files.find(

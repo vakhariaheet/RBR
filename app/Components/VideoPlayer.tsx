@@ -39,7 +39,7 @@ export default function VideoPlayer({ video, style,setRef }: VideoPlayerProps) {
 				preload='auto'
 				crossOrigin=''
 				ref={(videoRef) => {
-					console.log('ref', videoRef);
+					
 					if(!setRef) return;
 					setRef(videoRef);
 				 }}

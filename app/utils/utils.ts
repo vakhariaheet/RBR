@@ -84,10 +84,11 @@ export const getTopic = (subjectId: string, topicId: string) => {
 		isSuccess: true,
 		data: {
 			result: {
+				...topic,
 				id: topic.order,
-
 				name: topic.name,
 				order: topic.order,
+				
 				subtopics: topic.subtopics.map((subtopic) => ({
 					...subtopic,
 					id: subtopic.order,
@@ -143,6 +144,7 @@ export const getSubtopic = (
 	const subtopicIndex = topic.subtopics.findIndex(
 		(subtopic) => subtopic.order === Number(subtopicId),
 	);
+	
 	const subtopic = topic.subtopics[subtopicIndex];
 	const prevIndex = subtopicIndex === 0 ? null : subtopicIndex - 1;
 	const nextIndex =

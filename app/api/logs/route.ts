@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getLectureId } from '@/app/utils/utils';
 import { prisma } from '@/app/lib/prisma';
+import { cookies } from 'next/headers';
+import * as jose from 'jose';
 interface LogsBody {
 	type: LogType;
 	timestamp?: number;
@@ -20,7 +22,39 @@ enum LogType {
 
 
 export const POST = async (req: Request) => {
-   
+	const userToken = cookies().get('token')?.value;
+	 
+	if (!userToken)
+		return NextResponse.json(
+			{
+				isSuccess: false,
+				data: {
+					error: 'User not found',
+				},
+			},
+			{
+				status: 404,
+			},
+		);
+	const { payload } = await jose.jwtVerify(userToken, new TextEncoder().encode(process.env.NEXT_JWT as string)) 
+	const user = payload as {
+		username: string;
+		id: string;
+		iat: number;
+	}
+	if (!user)
+		return NextResponse.json(
+			{
+				isSuccess: false,
+				data: {
+					error: 'User not found',
+				},
+			},
+			{
+				status: 404,
+			},
+		);
+
 	const data = (await req.json()) as LogsBody;
 	switch (data.type) {
 		case LogType.VIDEO: {
@@ -38,7 +72,8 @@ export const POST = async (req: Request) => {
 			const {subjectId, timestamp, topicId, subtopicId, fileId } = data;
 			const video = await prisma.videoWatchInfo.findFirst({
 				where: {
-					videoId: getLectureId(subjectId,topicId, subtopicId, fileId),
+					videoId: getLectureId(subjectId, topicId, subtopicId, fileId),
+					userId: user.id || '',
 				},
 			});
 			if (!video) {
@@ -46,17 +81,19 @@ export const POST = async (req: Request) => {
 					data: {
 						hasEnded: false,
 						timeWatched: timestamp,
-						userId: 'demo',
+						userId: user.id || '',
 						videoId: getLectureId(subjectId,topicId, subtopicId, fileId),
 					},
 				});
 			} else {
 				await prisma.videoWatchInfo.updateMany({
 					where: {
-						videoId: getLectureId(subjectId,topicId, subtopicId, fileId),
+						videoId: getLectureId(subjectId, topicId, subtopicId, fileId),
+						userId: user.id || '',
 					},
 					data: {
 						timeWatched: timestamp,
+						hasEnded: false,
 					},
 				});
 			}
@@ -75,7 +112,8 @@ export const POST = async (req: Request) => {
 			const { topicId, subtopicId, fileId,subjectId,timestamp } = data;
 			const video = await prisma.videoWatchInfo.findFirst({
 				where: {
-					videoId: getLectureId(subjectId,topicId, subtopicId, fileId),
+					videoId: getLectureId(subjectId, topicId, subtopicId, fileId),
+					userId: user.id || '',
 				},
 			});
 			if (!video) {
@@ -92,7 +130,8 @@ export const POST = async (req: Request) => {
 			}
 			await prisma.videoWatchInfo.updateMany({
 				where: {
-					videoId: getLectureId(subjectId,topicId, subtopicId, fileId),
+					videoId: getLectureId(subjectId, topicId, subtopicId, fileId),
+					userId: user.id || '',
 				},
 				data: {
                hasEnded: true,
@@ -114,13 +153,14 @@ export const POST = async (req: Request) => {
 			const { topicId, subtopicId, fileId,subjectId } = data;
 			const pdf = await prisma.pDFWatchInfo.findFirst({
 				where: {
-					pdfId: getLectureId(subjectId,topicId, subtopicId, fileId),
+					pdfId: getLectureId(subjectId, topicId, subtopicId, fileId),
+					userId: user.id || '',
 				},
 			});
 			if (!pdf) {
 				await prisma.pDFWatchInfo.create({
 					data: {
-						userId: 'demo',
+						userId: user.id || '',
 						pdfId: getLectureId(subjectId,topicId, subtopicId, fileId),
 					},
 				});

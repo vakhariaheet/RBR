@@ -21,7 +21,7 @@ interface SubTopicPanelProps {
 	subjectId: string;
 	subtopicId?: string;
 	fileId?: string;
-	name?: string;
+	name: string;
 	allViewInfo?: (VideoWatchInfo | PDFWatchInfo)[];
 }
 
@@ -116,7 +116,7 @@ export default function SubTopicPanel({
 										key={crypto.randomUUID()}
 										className='cursor-pointer'
 										onClick={() => {
-											console.log(openedSubtopic, subtopic.order);
+											
 											if (openedSubtopic?.includes(subtopic.order)) {
 												setOpenedSubtopic(
 													openedSubtopic?.filter((id) => id !== subtopic.order),
@@ -179,9 +179,9 @@ export default function SubTopicPanel({
 								</div>
 							) : (
 								<Link
-									className={` fileHover hover:text-blue-500 hover:bg-blue-500 hover:bg-opacity-10  p-3 bg-white border border-b-0 border-x-0 first:border-t-0  duration-200 ease-in ${
-										name === subtopic.name && 'bg-blue-500 bg-opacity-10'
-									}`}
+									className={` fileHover hover:text-blue-500 hover:bg-blue-500 hover:bg-opacity-10  p-3  border border-b-0 border-x-0 first:border-t-0  duration-200 ease-in ${
+										name === subtopic.name? 'bg-blue-500 bg-opacity-10':"bg-white"
+									} `}
 									href={`/${subjectId}/${topic.order}/${subtopic.order}`}
 									style={{
 										color:
