@@ -116,7 +116,6 @@ export default function SubTopicPanel({
 										key={crypto.randomUUID()}
 										className='cursor-pointer'
 										onClick={() => {
-											
 											if (openedSubtopic?.includes(subtopic.order)) {
 												setOpenedSubtopic(
 													openedSubtopic?.filter((id) => id !== subtopic.order),
@@ -159,6 +158,8 @@ export default function SubTopicPanel({
 															verifyId(subtopic, file.order.toString()) &&
 															name !== file.name
 																? 'rgb(34, 197, 94)'
+																: name === file.name
+																? 'rgb(59, 130, 246)'
 																: '',
 														background: verifyId(
 															subtopic,
@@ -180,7 +181,9 @@ export default function SubTopicPanel({
 							) : (
 								<Link
 									className={` fileHover hover:text-blue-500 hover:bg-blue-500 hover:bg-opacity-10  p-3  border border-b-0 border-x-0 first:border-t-0  duration-200 ease-in ${
-										name === subtopic.name? 'bg-blue-500 bg-opacity-10':"bg-white"
+										name === subtopic.name
+											? 'bg-blue-500 bg-opacity-10'
+											: 'bg-white'
 									} `}
 									href={`/${subjectId}/${topic.order}/${subtopic.order}`}
 									style={{
@@ -188,6 +191,8 @@ export default function SubTopicPanel({
 											verifyId(subtopic as Subtopic | File) &&
 											name !== subtopic.name
 												? 'rgb(34, 197, 94)'
+												: name === subtopic.name
+												? 'rgb(59, 130, 246)'
 												: '',
 										background: verifyId(subtopic as Subtopic | File)
 											? 'rgba(34, 197, 94,.1)'
