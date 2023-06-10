@@ -184,7 +184,7 @@ export const isUserAuthenticated = async () => {
 		issuer: 'gate.heetvakharia.in',
 	});
 	if (!payload) return false;
-	return payload;
+	return payload as { username: string; id: string; iat: number };
 };
 
 export const authenticateUser = async (): Promise<{
