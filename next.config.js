@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    experimental: {
-        serverActions:true
-    }
+    images: {
+        
+        domains: ['localhost', 'papeer.s3.ap-south-1.amazonaws.com','amazonaws.com'],
+   }
 };
 
 module.exports = nextConfig;

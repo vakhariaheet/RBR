@@ -66,7 +66,8 @@ export default async function Topic({
 	});
 	allViewInfo.push(...allPDFViewInfo);
 	if (currentLecture) {
-		if (currentLecture.mimeType === 'video/mp4') {
+		
+		if (currentLecture.mimeType.includes('video')) {
 			viewInfo = allViewInfo.find(
 				(info) =>
 					'videoId' in info &&
@@ -80,6 +81,7 @@ export default async function Topic({
 			);
 		}
 	}
+	console.log(viewInfo)
 	return (
 		<div>
 			<Player

@@ -7,6 +7,7 @@ import SubTopicPanel from './SubtopicPanel';
 
 import PDFViewer from './PDFViewer';
 import { PDFWatchInfo, VideoWatchInfo } from '@prisma/client';
+import Image from 'next/image';
 enum LogType {
 	VIDEO = 'VIDEO',
 	VIDEO_ENDED = 'VIDEO_ENDED',
@@ -41,13 +42,14 @@ export default function Player({
 	getTopicResp,
 	subtopicId,
 	viewInfo,
-	allViewInfo
+	allViewInfo,
 }: TopicProps) {
 	const { next, prev } = getTopicResp.data;
 	const [ref, setRef] = useState<HTMLVideoElement | null>(null);
 	useEffect(() => {
 		if (!ref) return;
 		let interval: NodeJS.Timeout;
+
 		const onPlay = async () => {
 			interval = setInterval(() => {
 				fetch(`${window.location.origin}/api/logs`, {
@@ -87,6 +89,7 @@ export default function Player({
 			clearInterval(interval);
 		});
 		ref.addEventListener('loadedmetadata', () => {
+			console.log(viewInfo);
 			if (!viewInfo) return;
 			ref.currentTime = viewInfo.timeWatched;
 		});
@@ -147,7 +150,7 @@ export default function Player({
 			<div className='flex p-4 gap-4 max-xl:flex-col'>
 				<div className='w-2/3 max-xl:w-full'>
 					<div className=' flex justify-center pb-0 w-full'>
-						{file.mimeType !== 'pdf' ? (
+						{file.mimeType.includes('video') ? (
 							<div className='rounded-md overflow-hidden w-full aspect-video '>
 								<VideoPlayer
 									video={{
@@ -160,7 +163,7 @@ export default function Player({
 									setRef={setRef}
 								/>
 							</div>
-						) : (
+						) : file.mimeType.includes('pdf') ? (
 							<PDFViewer
 								url={`${process.env.NEXT_PUBLIC_S3_BUCKET}${file.uri}`}
 								name={file.name}
@@ -169,11 +172,173 @@ export default function Player({
 								fileId={fileId}
 								topicId={topic.order.toString()}
 							/>
+						) : file.mimeType.includes('image') ? (
+							<div className='rounded-md overflow-hidden w-full aspect-video relative '>
+								<Image
+									src={`${process.env.NEXT_PUBLIC_S3_BUCKET}${file.uri}`}
+									alt={file.name}
+									fill
+								/>
+							</div>
+						) : file.mimeType.includes('zip') ? (
+							<div className='rounded-md overflow-hidden w-full aspect-video relative flex justify-center items-center'>
+								<div className='flex flex-col items-center gap-2'>
+									<svg className='h-16 w-16' viewBox='0 0 682.667 682.667'>
+										<g>
+											<defs>
+												<clipPath id='a' clipPathUnits='userSpaceOnUse'>
+													<path
+														d='M0 512h512V0H0Z'
+														fill='#000000'
+														data-original='#000000'
+													/>
+												</clipPath>
+											</defs>
+											<path
+												d='M0 0v-90'
+												style={{
+													strokeWidth: 20,
+													strokeLinecap: 'round',
+													strokeLinejoin: 'round',
+													strokeMiterlimit: '22.926',
+													strokeDasharray: 'none',
+													strokeOpacity: 1,
+												}}
+												transform='matrix(1.33333 0 0 -1.33333 341.333 454.666)'
+												fill='none'
+												stroke='#000000'
+												strokeWidth={20}
+												strokeLinecap='round'
+												strokeLinejoin='round'
+												strokeMiterlimit='22.926'
+												strokeDasharray='none'
+												data-original='#000000'
+											/>
+											<g
+												clipPath='url(#a)'
+												transform='matrix(1.33333 0 0 -1.33333 0 682.667)'
+											>
+												<path
+													d='M0 0h17.5C29.875 0 40 10.125 40 22.5v0C40 34.875 29.875 45 17.5 45H-5v-90'
+													style={{
+														strokeWidth: 20,
+														strokeLinecap: 'round',
+														strokeLinejoin: 'round',
+														strokeMiterlimit: '22.926',
+														strokeDasharray: 'none',
+														strokeOpacity: 1,
+													}}
+													transform='translate(301 126)'
+													fill='none'
+													stroke='#000000'
+													strokeWidth={20}
+													strokeLinecap='round'
+													strokeLinejoin='round'
+													strokeMiterlimit='22.926'
+													strokeDasharray='none'
+													data-original='#000000'
+												/>
+												<path
+													d='M0 0h45L0-90h45'
+													style={{
+														strokeWidth: 20,
+														strokeLinecap: 'round',
+														strokeLinejoin: 'round',
+														strokeMiterlimit: '22.926',
+														strokeDasharray: 'none',
+														strokeOpacity: 1,
+													}}
+													transform='translate(171 171)'
+													fill='none'
+													stroke='#000000'
+													strokeWidth={20}
+													strokeLinecap='round'
+													strokeLinejoin='round'
+													strokeMiterlimit='22.926'
+													strokeDasharray='none'
+													data-original='#000000'
+												/>
+												<path
+													d='M0 0h220.001C231.001 0 240-9 240-20v-140c0-11-8.999-20-19.999-20H0c-11 0-20 9-20 20v140C-20-9-11 0 0 0z'
+													style={{
+														strokeWidth: 20,
+														strokeLinecap: 'round',
+														strokeLinejoin: 'round',
+														strokeMiterlimit: '22.926',
+														strokeDasharray: 'none',
+														strokeOpacity: 1,
+													}}
+													transform='translate(146 216)'
+													fill='none'
+													stroke='#000000'
+													strokeWidth={20}
+													strokeLinecap='round'
+													strokeLinejoin='round'
+													strokeMiterlimit='22.926'
+													strokeDasharray='none'
+													data-original='#000000'
+												/>
+												<path
+													d='M0 0h-87.677C-100.498 0-111 10.495-111 23.322v313.356C-111 349.505-100.505 360-87.677 360H42.055c15.244 0 25.014-9.574 28.594-23.322l11.715-44.983h275.313c12.828 0 23.323-10.506 23.323-23.322V23.322C381 10.495 370.501 0 357.678 0H270'
+													style={{
+														strokeWidth: 20,
+														strokeLinecap: 'round',
+														strokeLinejoin: 'round',
+														strokeMiterlimit: '22.926',
+														strokeDasharray: 'none',
+														strokeOpacity: 1,
+													}}
+													transform='translate(121 116)'
+													fill='none'
+													stroke='#000000'
+													strokeWidth={20}
+													strokeLinecap='round'
+													strokeLinejoin='round'
+													strokeMiterlimit='22.926'
+													strokeDasharray='none'
+													data-original='#000000'
+												/>
+												<path
+													d='M0 0h267.851c10.999 0 19.999-9.002 19.999-20v-20.68'
+													style={{
+														strokeWidth: 20,
+														strokeLinecap: 'round',
+														strokeLinejoin: 'round',
+														strokeMiterlimit: '22.926',
+														strokeDasharray: 'none',
+														strokeOpacity: 1,
+													}}
+													transform='translate(194.15 452.678)'
+													fill='none'
+													stroke='#000000'
+													strokeWidth={20}
+													strokeLinecap='round'
+													strokeLinejoin='round'
+													strokeMiterlimit='22.926'
+													strokeDasharray='none'
+													data-original='#000000'
+												/>
+											</g>
+										</g>
+									</svg>
+												<h4 className='text-center'>{file.name.substring(0, file.name.lastIndexOf('.'))}</h4>
+												<a href={`${process.env.NEXT_PUBLIC_S3_BUCKET}${file.uri}`} className='py-3 border px-12 text-xl rounded-md border-blue-300 duration-75 ease-in hover:text-blue-500 hover:border-blue-500'>
+													Download
+												</a>
+								</div>
+							</div>
+						) : (
+							<iframe
+								src={`https://view.officeapps.live.com/op/embed.aspx?src=${process.env.NEXT_PUBLIC_S3_BUCKET}${file.uri}`}
+								className='w-full aspect-video'
+							/>
 						)}
 					</div>
 					<div className='flex justify-center w-full'>
 						<div className='flex justify-center w-full '>
-							<h3 className=' text-xl p-5 bg-white mb-3 w-full'>{file.name}</h3>
+							<h3 className=' text-xl p-5 bg-white mb-3 w-full'>
+								{file.name.substring(0, file.name.lastIndexOf('.'))}
+							</h3>
 						</div>
 					</div>
 				</div>

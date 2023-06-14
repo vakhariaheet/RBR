@@ -53,6 +53,7 @@ export default async function File({
 			(file) => file.order === Number(fileId),
 		);
 	}
+	console.log(currentLecture);
 	if (!getLectureResp.isSuccess) {
 		return <h1>File not found</h1>;
 	}
@@ -76,7 +77,7 @@ export default async function File({
 	});
 	allViewInfo.push(...allPDFViewInfo);
 	if (currentLecture) {
-		if (currentLecture.mimeType === 'video/mp4') {
+		if (currentLecture.mimeType.includes('video')) {
 			viewInfo = allViewInfo.find(
 				(info) =>
 					'videoId' in info &&

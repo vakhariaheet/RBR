@@ -34,7 +34,7 @@ export default async function Topic({
 		subtopicId = getTopicResp.data.result.order.toString();
 	} else if ('files' in getTopicResp.data.result.subtopics[0]) {
 		subtopicId = getTopicResp.data.result.subtopics[0].order.toString();
-		fileId = getTopicResp.data.result.subtopics[0].files[0].order.toString();
+		fileId = getTopicResp.data.result.subtopics[0].files[0]?.order.toString();
 	} else {
 		subtopicId = getTopicResp.data.result.subtopics[0].order.toString();
 	}
@@ -82,8 +82,10 @@ export default async function Topic({
 		},
 	});
 	allViewInfo.push(...allPDFViewInfo);
+	console.log(currentLecture)
 	if (currentLecture) {
-		if (currentLecture.mimeType === 'video/mp4') {
+		if (currentLecture.mimeType.includes('video')) {
+			console.log(getLectureId(subjectId, topicId, subtopicId, fileId));
 			viewInfo = allViewInfo.find(
 				(info) =>
 					'videoId' in info &&

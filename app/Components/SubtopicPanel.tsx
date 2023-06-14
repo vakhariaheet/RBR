@@ -28,7 +28,6 @@ interface SubTopicPanelProps {
 export default function SubTopicPanel({
 	topic,
 	subjectId,
-	fileId,
 	subtopicId,
 	name,
 	allViewInfo,
@@ -142,7 +141,7 @@ export default function SubTopicPanel({
 												/>
 											</g>
 										</svg>
-										{subtopic.name}
+										{subtopic.name.substring(0, subtopic.name.lastIndexOf('.'))}
 									</h2>
 									<div className='mt-2'>
 										{openedSubtopic?.includes(subtopic.order) &&
@@ -171,8 +170,9 @@ export default function SubTopicPanel({
 												>
 													<Link
 														href={`/${subjectId}/${topic.order}/${subtopic.order}/${file.order}`}
+														scroll={false}
 													>
-														{file.name}
+														{file.name.substring(0, file.name.lastIndexOf('.'))}
 													</Link>
 												</div>
 											))}
@@ -186,6 +186,7 @@ export default function SubTopicPanel({
 											: 'bg-white'
 									} `}
 									href={`/${subjectId}/${topic.order}/${subtopic.order}`}
+									scroll={false}
 									style={{
 										color:
 											verifyId(subtopic as Subtopic | File) &&
@@ -199,7 +200,7 @@ export default function SubTopicPanel({
 											: '',
 									}}
 								>
-									{subtopic.name}
+									{subtopic.name.substring(0, subtopic.name.lastIndexOf('.'))}
 								</Link>
 							)}
 						</>
