@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from 'react';
 import { clarity } from 'react-microsoft-clarity';
 
