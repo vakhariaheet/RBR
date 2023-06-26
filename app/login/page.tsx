@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 import * as jose from 'jose';
+import { clarity } from 'react-microsoft-clarity';
+import { Clarity } from '../Components/Clarity';
 
 export default function Login() {
 	const [username, setUsername] = useState('');
@@ -21,15 +23,23 @@ export default function Login() {
 		});
 		const data = await res.json();
     
-        if (data.isSuccess) {
+		if (data.isSuccess) {
+			clarity.identify(username, {
+				username,
+				timestamp: Date.now(),
+			});
+			clarity.setTag('username', username);
+			clarity.setTag('timestamp', new Date().toISOString());
+
            router.push('/');
-           
+			
         }
         else alert('Invalid username or password');
 	};
 
 	return (
 		<div className='p-4'>
+			<Clarity page='Login' /> 
 			<h1 className='text-5xl text-center '>Login</h1>
 			<div className='flex justify-center mt-10'>
 				<div className='flex flex-col gap-4 max-w-[50rem] w-full items-center '>

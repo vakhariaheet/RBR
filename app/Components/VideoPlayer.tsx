@@ -52,7 +52,6 @@ export default function VideoPlayer({ video, style,setRef }: VideoPlayerProps) {
 				<MediaTimeDisplay showDuration></MediaTimeDisplay>
 				<MediaMuteButton></MediaMuteButton>
 				<MediaVolumeRange></MediaVolumeRange>
-				<MediaAirplayButton></MediaAirplayButton>
 				<MediaFullscreenButton></MediaFullscreenButton>
 				<MediaPlaybackRateButton rates={[0.5, 1, 1.5, 2]}></MediaPlaybackRateButton>
 			</MediaControlBar>

@@ -8,6 +8,7 @@ import SubTopicPanel from './SubtopicPanel';
 import PDFViewer from './PDFViewer';
 import { PDFWatchInfo, VideoWatchInfo } from '@prisma/client';
 import Image from 'next/image';
+import { Clarity } from './Clarity';
 enum LogType {
 	VIDEO = 'VIDEO',
 	VIDEO_ENDED = 'VIDEO_ENDED',
@@ -109,6 +110,7 @@ export default function Player({
 	}, [ref]);
 	return (
 		<div className=' bg-slate-50'>
+			<Clarity page={`${file.name.substring(0, file.name.lastIndexOf('.'))} in Player`} currentTopic={topic.name} />
 			<div className='bg-slate-100 p-4 shadow-md text-xl flex justify-between'>
 				{prev ? (
 					<Link
@@ -132,7 +134,7 @@ export default function Player({
 				) : (
 					<p></p>
 				)}
-			</div>
+			C</div>
 			<Link
 				href={'/'}
 				className='home-link block absolute left-4 rounded-md p-4 bottom-8 aspect-square w-max bg-white'
