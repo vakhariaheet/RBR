@@ -22,7 +22,7 @@ enum LogType {
 
 
 export const POST = async (req: Request) => {
-	const userToken = cookies().get('token')?.value;
+	const userToken = cookies().get('rbr-gate-token')?.value;
 	 
 	if (!userToken)
 		return NextResponse.json(
