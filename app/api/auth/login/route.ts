@@ -56,7 +56,7 @@ export const POST = async (req: NextRequest, res: Response) => {
     }, {
         status: 200,
         headers: {
-            'Set-Cookie': `token=${token}; Path=/; HttpOnly; SameSite=Strict; max-age=${60 * 60 * 24 * 7};`,
+            'Set-Cookie': `rbr-gate-token=${token}; Path=/; HttpOnly; SameSite=Strict; max-age=${60 * 60 * 24 * 7};`,
             'authorization': `Bearer ${token}`
         }
     })
