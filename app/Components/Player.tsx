@@ -134,7 +134,7 @@ export default function Player({
 				) : (
 					<p></p>
 				)}
-			C</div>
+			</div>
 			<Link
 				href={'/'}
 				className='home-link block absolute left-4 rounded-md p-4 bottom-8 aspect-square w-max bg-white'
