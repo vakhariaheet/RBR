@@ -44,7 +44,7 @@ export const POST = async (req: NextRequest, res: Response) => {
         id:user.id,
     }).setProtectedHeader({alg:"HS256"}).setIssuer('gate.heetvakharia.in').sign(secret);
     req.cookies.set({
-        name: 'token',
+        name: 'rbr-gate-token',
         value: token,
     
     });
