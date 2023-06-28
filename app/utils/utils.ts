@@ -180,6 +180,7 @@ export const isUserAuthenticated = async () => {
 	const secret = new TextEncoder().encode(
 		process.env.NEXT_JWT as string,
 	);
+	
 	const { payload } = await jose.jwtVerify(token.value, secret, {
 		issuer: 'gate.heetvakharia.in',
 	});

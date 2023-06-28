@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 import * as jose from 'jose';
-import { clarity } from 'react-microsoft-clarity';
+
 import { Clarity } from '../Components/Clarity';
 
 export default function Login() {
@@ -24,12 +24,6 @@ export default function Login() {
 		const data = await res.json();
     
 		if (data.isSuccess) {
-			clarity.identify(username, {
-				username,
-				timestamp: Date.now(),
-			});
-			clarity.setTag('username', username);
-			clarity.setTag('timestamp', new Date().toISOString());
 
            router.push('/');
 			
