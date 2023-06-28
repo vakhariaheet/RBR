@@ -3,7 +3,7 @@ import React from 'react';
 import { headers } from 'next/headers';
 import Link from 'next/link';
 import { authenticateUser, getSubject } from '../utils/utils';
-import { Clarity } from '../Components/Clarity';
+
 
 type Props = {
 	params: { subjectId: string };
@@ -24,7 +24,7 @@ export default async function Subject({
 
 	return (
 		<div className='p-3 bg-slate-50'>
-			<Clarity page={`${subject.name} Page`} />
+		
 			<div
 				className={`subject-header h-[40vh] bg-cover bg-center text-white rounded-md flex items-center justify-center`}
 				style={{
