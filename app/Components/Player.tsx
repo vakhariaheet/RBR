@@ -8,7 +8,6 @@ import SubTopicPanel from './SubtopicPanel';
 import PDFViewer from './PDFViewer';
 import { PDFWatchInfo, VideoWatchInfo } from '@prisma/client';
 import Image from 'next/image';
-import { Clarity } from './Clarity';
 import { useResizeObserver } from '../hooks/useResize';
 enum LogType {
 	VIDEO = 'VIDEO',
@@ -112,7 +111,6 @@ export default function Player({
 	}, [ref]);
 	return (
 		<div className=' bg-slate-50' ref={contRef}>
-			<Clarity page={`${file.name.substring(0, file.name.lastIndexOf('.'))} in Player`} currentTopic={topic.name} />
 			<div className='bg-slate-100 p-4 shadow-md text-xl flex justify-between max-md:p-2 items-center'>
 				{prev ? (
 					<Link
