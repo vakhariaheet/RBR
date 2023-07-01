@@ -9,6 +9,7 @@ import PDFViewer from './PDFViewer';
 import { PDFWatchInfo, VideoWatchInfo } from '@prisma/client';
 import Image from 'next/image';
 import { Clarity } from './Clarity';
+import { useResizeObserver } from '../hooks/useResize';
 enum LogType {
 	VIDEO = 'VIDEO',
 	VIDEO_ENDED = 'VIDEO_ENDED',
@@ -46,7 +47,8 @@ export default function Player({
 	allViewInfo,
 }: TopicProps) {
 	const { next, prev } = getTopicResp.data;
-	const [ref, setRef] = useState<HTMLVideoElement | null>(null);
+	const [ ref, setRef ] = useState<HTMLVideoElement | null>(null);
+	const [ contRef, rect ] = useResizeObserver();
 	useEffect(() => {
 		if (!ref) return;
 		let interval: NodeJS.Timeout;
@@ -90,7 +92,7 @@ export default function Player({
 			clearInterval(interval);
 		});
 		ref.addEventListener('loadedmetadata', () => {
-			console.log(viewInfo);
+	
 			if (!viewInfo) return;
 			ref.currentTime = viewInfo.timeWatched;
 		});
@@ -109,27 +111,27 @@ export default function Player({
 		};
 	}, [ref]);
 	return (
-		<div className=' bg-slate-50'>
+		<div className=' bg-slate-50' ref={contRef}>
 			<Clarity page={`${file.name.substring(0, file.name.lastIndexOf('.'))} in Player`} currentTopic={topic.name} />
-			<div className='bg-slate-100 p-4 shadow-md text-xl flex justify-between'>
+			<div className='bg-slate-100 p-4 shadow-md text-xl flex justify-between max-md:p-2 items-center'>
 				{prev ? (
 					<Link
-						className='opacity-70 hover:opacity-100 text-lg'
+						className='opacity-70 hover:opacity-100 max-md:text-xs text-lg'
 						href={`/${subjectId}/${prev.id}`}
 					>
-						Previous Subtopic
+						{rect.width > 600?'Previous Subtopic':'👈'}
 					</Link>
 				) : (
 					<p></p>
 				)}
-				<h3>{topic.name}</h3>
+				<h3 className='text-lg max-md:text-xs'>{topic.name}</h3>
 
 				{next ? (
 					<Link
-						className='opacity-70 hover:opacity-100 text-lg'
+						className='opacity-70 hover:opacity-100 max-md:text-xs text-lg'
 						href={`/${subjectId}/${next.id}`}
 					>
-						Next Subtopic
+						{rect.width > 600?'Next Subtopic':'👉'}
 					</Link>
 				) : (
 					<p></p>
@@ -137,9 +139,9 @@ export default function Player({
 			</div>
 			<Link
 				href={'/'}
-				className='home-link block absolute left-4 rounded-md p-4 bottom-8 aspect-square w-max bg-white'
+				className='home-link block absolute left-4 rounded-md p-4 bottom-8 aspect-square w-max max-md:mt-1 max-md:ml-1 bg-white max-md:static max-md:p-2'
 			>
-				<svg viewBox='0 0 511 511.999' className='w-8 h-8 '>
+				<svg viewBox='0 0 511 511.999' className='w-8 h-8 max-md:w-4 max-md:h-4 '>
 					<g>
 						<path
 							d='M498.7 222.695c-.016-.011-.028-.027-.04-.039L289.805 13.81C280.902 4.902 269.066 0 256.477 0c-12.59 0-24.426 4.902-33.332 13.809L14.398 222.55c-.07.07-.144.144-.21.215-18.282 18.386-18.25 48.218.09 66.558 8.378 8.383 19.44 13.235 31.273 13.746.484.047.969.07 1.457.07h8.32v153.696c0 30.418 24.75 55.164 55.168 55.164h81.711c8.285 0 15-6.719 15-15V376.5c0-13.879 11.293-25.168 25.172-25.168h48.195c13.88 0 25.168 11.29 25.168 25.168V497c0 8.281 6.715 15 15 15h81.711c30.422 0 55.168-24.746 55.168-55.164V303.14h7.719c12.586 0 24.422-4.903 33.332-13.813 18.36-18.367 18.367-48.254.027-66.633zm-21.243 45.422a17.03 17.03 0 0 1-12.117 5.024H442.62c-8.285 0-15 6.714-15 15v168.695c0 13.875-11.289 25.164-25.168 25.164h-66.71V376.5c0-30.418-24.747-55.168-55.169-55.168H232.38c-30.422 0-55.172 24.75-55.172 55.168V482h-66.71c-13.876 0-25.169-11.29-25.169-25.164V288.14c0-8.286-6.715-15-15-15H48a13.9 13.9 0 0 0-.703-.032c-4.469-.078-8.66-1.851-11.8-4.996-6.68-6.68-6.68-17.55 0-24.234.003 0 .003-.004.007-.008l.012-.012L244.363 35.02A17.003 17.003 0 0 1 256.477 30c4.574 0 8.875 1.781 12.113 5.02l208.8 208.796.098.094c6.645 6.692 6.633 17.54-.031 24.207zm0 0'
@@ -149,7 +151,7 @@ export default function Player({
 					</g>
 				</svg>
 			</Link>
-			<div className='flex p-4 gap-4 max-xl:flex-col'>
+			<div className='flex p-4 gap-4 max-md:gap-0 max-md:pt-0 max-xl:flex-col'>
 				<div className='w-2/3 max-xl:w-full'>
 					<div className=' flex justify-center pb-0 w-full'>
 						{file.mimeType.includes('video') ? (
@@ -338,7 +340,7 @@ export default function Player({
 					</div>
 					<div className='flex justify-center w-full'>
 						<div className='flex justify-center w-full '>
-							<h3 className=' text-xl p-5 bg-white mb-3 w-full'>
+							<h3 className=' text-xl p-5 bg-white mb-3 w-full max-md:text-sm max-md:p-2'>
 								{file.name.substring(0, file.name.lastIndexOf('.'))}
 							</h3>
 						</div>

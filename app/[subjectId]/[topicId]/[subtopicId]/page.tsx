@@ -81,7 +81,7 @@ export default async function Topic({
 			);
 		}
 	}
-	console.log(viewInfo)
+
 	return (
 		<div>
 			<Player

@@ -82,10 +82,10 @@ export default async function Topic({
 		},
 	});
 	allViewInfo.push(...allPDFViewInfo);
-	console.log(currentLecture)
+
 	if (currentLecture) {
 		if (currentLecture.mimeType.includes('video')) {
-			console.log(getLectureId(subjectId, topicId, subtopicId, fileId));
+		
 			viewInfo = allViewInfo.find(
 				(info) =>
 					'videoId' in info &&

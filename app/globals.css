@@ -165,3 +165,10 @@ html,body{
   color:rgb(59, 130, 246) !important;
   background-color:rgba(59 ,130 ,246 , .1) !important;
 }
+
+@media(max-width:600px){
+  html{
+    --media-control-padding:7px;
+  }
+  
+}

@@ -175,11 +175,12 @@ export const getSubtopic = (
 
 
 export const isUserAuthenticated = async () => {
-	const token = (await cookies().getAll())[ 0 ];
+	const token = (await cookies().getAll()).filter(tokens => tokens.name === 'rbr-gate-token')[0];
 	if (!token) return false;
 	const secret = new TextEncoder().encode(
 		process.env.NEXT_JWT as string,
 	);
+
 	
 	const { payload } = await jose.jwtVerify(token.value, secret, {
 		issuer: 'gate.heetvakharia.in',

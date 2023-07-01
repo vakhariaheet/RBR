@@ -108,12 +108,12 @@ export default function SubTopicPanel({
 						<>
 							{'files' in subtopic && subtopic.files.length > 0 ? (
 								<div
-									className='files p-3 bg-white border border-b-0 border-x-0 first:border-t-0 '
+									className='files max-md:p-0 p-3 bg-white border border-b-0 border-x-0 first:border-t-0 '
 									key={crypto.randomUUID()}
 								>
 									<h2
 										key={crypto.randomUUID()}
-										className='cursor-pointer'
+										className='cursor-pointer text-lg'
 										onClick={() => {
 											if (openedSubtopic?.includes(subtopic.order)) {
 												setOpenedSubtopic(
@@ -123,6 +123,7 @@ export default function SubTopicPanel({
 												setOpenedSubtopic([...openedSubtopic, subtopic.order]);
 											}
 										}}
+										
 									>
 										<svg
 											viewBox='0 0 492.004 492.004'
@@ -180,7 +181,7 @@ export default function SubTopicPanel({
 								</div>
 							) : (
 								<Link
-									className={` fileHover hover:text-blue-500 hover:bg-blue-500 hover:bg-opacity-10  p-3  border border-b-0 border-x-0 first:border-t-0  duration-200 ease-in ${
+									className={` fileHover hover:text-blue-500 hover:bg-blue-500 hover:bg-opacity-10  p-3  border border-b-0 border-x-0 first:border-t-0 max-md:p-1 max-md:text-xs  duration-200 ease-in ${
 										name === subtopic.name
 											? 'bg-blue-500 bg-opacity-10'
 											: 'bg-white'

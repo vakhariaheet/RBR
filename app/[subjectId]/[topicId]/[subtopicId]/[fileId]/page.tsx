@@ -53,7 +53,7 @@ export default async function File({
 			(file) => file.order === Number(fileId),
 		);
 	}
-	console.log(currentLecture);
+
 	if (!getLectureResp.isSuccess) {
 		return <h1>File not found</h1>;
 	}
