@@ -51,11 +51,12 @@ export default function VideoPlayer({
 						if (!setRef) return;
 						setRef(videoRef);
 					}}
+					src={`${process.env.NEXT_PUBLIC_S3_BUCKET}${video.uri}`}
 				>
-					<source
+					{/* <source
 						src={`${process.env.NEXT_PUBLIC_S3_BUCKET}${video.uri}`}
 						type={video.mimeType}
-					/>
+					/> */}
 					{/* <source
 						src={`${process.env.NEXT_PUBLIC_S3_BUCKET}${video.uri.replace(
 							/\.[^.]*$/,
