@@ -56,13 +56,13 @@ export default function VideoPlayer({
 						src={`${process.env.NEXT_PUBLIC_S3_BUCKET}${video.uri}`}
 						type={video.mimeType}
 					/>
-					<source
+					{/* <source
 						src={`${process.env.NEXT_PUBLIC_S3_BUCKET}${video.uri.replace(
 							/\.[^.]*$/,
 							'.mp4',
 						)}`}
 						type='video/mp4'
-					/>
+					/> */}
 				</video>
 				{/* <MediaPosterImage src={`${process.env.NEXT_PUBLIC_S3_BUCKET}${video.uri.replace('RBR/','RBR/thumbnails/').replace(/\.[^.]*$/,'.png')}`} /> */}
 				<MediaControlBar>
