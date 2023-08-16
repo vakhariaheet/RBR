@@ -110,7 +110,7 @@ export default function Player({
 		};
 	}, [ref]);
 	return (
-		<div className=' bg-slate-50' ref={contRef}>
+		<div className=' bg-slate-50 relative pb-20' ref={contRef}>
 			<div className='bg-slate-100 p-4 shadow-md text-xl flex justify-between max-md:p-2 items-center'>
 				{prev ? (
 					<Link
@@ -137,7 +137,7 @@ export default function Player({
 			</div>
 			<Link
 				href={'/'}
-				className='home-link block absolute left-4 rounded-md p-4 bottom-8 aspect-square w-max max-md:mt-1 max-md:ml-1 bg-white max-md:static max-md:p-2'
+				className='home-link block absolute left-4 rounded-md p-4 bottom-0 aspect-square w-max max-md:mt-1 max-md:ml-1 bg-white max-md:static max-md:p-2'
 			>
 				<svg viewBox='0 0 511 511.999' className='w-8 h-8 max-md:w-4 max-md:h-4 '>
 					<g>

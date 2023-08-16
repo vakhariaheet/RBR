@@ -24,8 +24,9 @@ export default function RootLayout({
 				
 			</head>
 			<body className={inter.className}>
-				<Banner/>
+				
 				{children}
+				<Banner/>
 				<Script src='https://documentcloud.adobe.com/view-sdk/main.js'></Script>
 				
 			</body>
