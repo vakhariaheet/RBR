@@ -17,7 +17,7 @@ export default function Banner(): JSX.Element {
 			script.type = 'text/javascript';
 			script.src =
 				location.protocol +
-				`//www.profitablecreativeformat.com/${atOptions.key}/invoke.js`;
+				`//www.highcpmcreativeformat.com/${atOptions.key}/invoke.js`;
 			conf.innerHTML = `atOptions = ${JSON.stringify(atOptions)}`;
 			banner.current.append(conf);
 			banner.current.append(script);
